@@ -183,47 +183,50 @@ def get_gz_year(lunar_year: int) -> str:
     return heavenly_stems[G] + earthly_branches[Z]
 
 def get_gz_month(lunar_month: int, lunar_year: int) -> str:
-    """
-    获取月份的干支纪月
-    参数：
-        lunar_month: 农历月份
-        lunar_year: 农历年份
-    返回：
-        干支纪月字符串
-    """
-    heavenly_stems = "甲乙丙丁戊己庚辛壬癸"
-    earthly_branches = "子丑寅卯辰巳午未申酉戌亥"
-    
-    # 确定年干支
-    year_stem_index = (lunar_year - 4) % 10  # 1984年为甲子年
-    
-    # 确定正月（寅月）的天干
-    # 甲己年起丙寅，乙庚年起戊寅，丙辛年起庚寅，丁壬年起壬寅，戊癸年起甲寅
-    first_month_stem_map = {
-        0: 2,  # 甲年起丙
-        5: 2,  # 己年起丙
-        1: 4,  # 乙年起戊
-        6: 4,  # 庚年起戊
-        2: 6,  # 丙年起庚
-        7: 6,  # 辛年起庚
-        3: 8,  # 丁年起壬
-        8: 8,  # 壬年起壬
-        4: 0,  # 戊年起甲
-        9: 0   # 癸年起甲
-    }
-    
-    # 确定正月的天干
-    first_month_stem = first_month_stem_map[year_stem_index]
-    
-    # 计算当前月份的天干
-    # 从正月（寅月）开始，每个月天干依次推进
-    stem_index = (first_month_stem + ((lunar_month - 1) % 12)) % 10
-    
-    # 计算当前月份的地支
-    # 正月对应寅，依次类推
-    branch_index = ((lunar_month + 1) % 12)  # +1是因为正月对应寅（寅是地支的第三位）
-    
-    return heavenly_stems[stem_index] + earthly_branches[branch_index]
+    # TODO 农历月份的干支纪月
+    return ""
+# def get_gz_month(lunar_month: int, lunar_year: int) -> str:
+#     """
+#     获取月份的干支纪月
+#     参数：
+#         lunar_month: 农历月份
+#         lunar_year: 农历年份
+#     返回：
+#         干支纪月字符串
+#     """
+#     heavenly_stems = "甲乙丙丁戊己庚辛壬癸"
+#     earthly_branches = "子丑寅卯辰巳午未申酉戌亥"
+#
+#     # 确定年干支
+#     year_stem_index = (lunar_year - 4) % 10  # 1984年为甲子年
+#
+#     # 确定正月（寅月）的天干
+#     # 甲己年起丙寅，乙庚年起戊寅，丙辛年起庚寅，丁壬年起壬寅，戊癸年起甲寅
+#     first_month_stem_map = {
+#         0: 2,  # 甲年起丙
+#         5: 2,  # 己年起丙
+#         1: 4,  # 乙年起戊
+#         6: 4,  # 庚年起戊
+#         2: 6,  # 丙年起庚
+#         7: 6,  # 辛年起庚
+#         3: 8,  # 丁年起壬
+#         8: 8,  # 壬年起壬
+#         4: 0,  # 戊年起甲
+#         9: 0   # 癸年起甲
+#     }
+#
+#     # 确定正月的天干
+#     first_month_stem = first_month_stem_map[year_stem_index]
+#
+#     # 计算当前月份的天干
+#     # 从正月（寅月）开始，每个月天干依次推进
+#     stem_index = (first_month_stem + ((lunar_month - 1) % 12)) % 10
+#
+#     # 计算当前月份的地支
+#     # 正月对应寅，依次类推
+#     branch_index = ((lunar_month + 1) % 12)  # +1是因为正月对应寅（寅是地支的第三位）
+#
+#     return heavenly_stems[stem_index] + earthly_branches[branch_index]
 
 def get_gz_day(date: datetime) -> str:
     """
@@ -295,7 +298,7 @@ def generate_calendar_data(start_date_str: str, end_date_str: str) -> str:
     current_date = start_date
 
     insert_statements = []
-    insert_template = """INSERT INTO `olm`.`olm_days` 
+    insert_template = """INSERT INTO `days` 
 (`id`, `animal`, `cnDay`, `day`, `gzDate`, `gzMonth`, `gzYear`, `isBigMonth`, `lDate`, `lMonth`, `lunarDate`, `lunarMonth`, `lunarYear`, `month`, `oDate`, `status`, `suit`, `avoid`, `term`, `bvalue`, `year`, `stype`, `desc`) VALUES 
 """
 
@@ -355,7 +358,7 @@ def generate_calendar_data(start_date_str: str, end_date_str: str) -> str:
 # 使用示例
 if __name__ == "__main__":
     
-    # 生成2025年1月的数据
+    # 生成数据
     sql = generate_calendar_data('2025-01-01', '2025-12-31')
     
     # 将生成的SQL语句保存到文件
